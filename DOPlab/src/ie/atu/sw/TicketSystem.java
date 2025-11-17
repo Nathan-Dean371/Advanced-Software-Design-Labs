@@ -32,11 +32,11 @@ public class TicketSystem {
 	 
 	 public static String advisory(TicketOperation.advisory adv)
 	 {
-		 var opt = advisory(adv.venue());
-		 return opt.isPresent() ? opt.get() : "Enjoy the concert.";
+		 var result = advisory(adv.venue());
+		 return result.orElse("Enjoy the concert.");
 	 }
 	 
-	 public static Optional<String> advisory(Venue venue)
+	 public static Advisory<String> advisory(Venue venue)
 	 {
 		 double lightClothingTemp = 13.00d;
 		 var sb = new StringBuilder();
@@ -53,7 +53,9 @@ public class TicketSystem {
 		 	default -> "";
 		 });
 		 
-		 return sb.length() > 0 ? Optional.of(sb.toString()) : Optional.of(null);
+		 return sb.length() > 0
+				? new Advisory.Present<>(sb.toString())
+		 		: new Advisory.Absent<>();
 	 }
 
 }
